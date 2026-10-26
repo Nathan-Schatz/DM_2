@@ -153,33 +153,32 @@ int main23(void)
 // Autrement dit, si l’entier vaut 3, les trois premiers caractères sont envoyés à la fin. On supposera (inutile de
 // le vérifier) que le décalage est un nombre entre zéro inclus et la taille de la chaîne exclue.
 
-int cycle(int tableau[], int taille, int decalage)
+char *cycle(const char *s, int decalage)
 {
-    for (int i = 0; i < decalage; i++)
+    int n = strlen(s);
+    char *res = malloc((n + 1) * sizeof(char));
+    if (res == NULL)
     {
-        int temp = tableau[0];
-        for (int j = 0; j < taille - 1; j++)
-        {
-            tableau[j] = tableau[j + 1];
-        }
-        tableau[taille - 1] = temp;
+        return NULL;
     }
-
-    return 0;
+    for (int i = 0; i < n; i++)
+    {
+        res[i] = s[(i + decalage) % n];
+    }
+    res[n] = '\0';
+    return res;
 }
 
 int main24(void)
 {
-    int tableau[] = {0, 1, 2, 3, 4};
-    int taille = sizeof(tableau) / sizeof(tableau[0]);
-    int decalage = 2;
-    cycle(tableau, taille, decalage);
-    printf("Tableau après décalage de %d : ", decalage);
-    for (int i = 0; i < taille; i++)
+    char *tests[] = {"abcdef", "abcdef", "abcdef", "x"};
+    int decalages[] = {0, 3, 5, 0};
+    for (int k = 0; k < 4; k++)
     {
-        printf("%d ", tableau[i]);
+        char *r = cycle(tests[k], decalages[k]);
+        printf("cycle(\"%s\", %d) = \"%s\"\n", tests[k], decalages[k], r);
+        free(r);
     }
-    printf("\n");
     return 0;
 }
 
@@ -189,12 +188,51 @@ int main24(void)
 // de le vérifier) et renvoyant le tableau des chaînes obtenues par tous les décalages possibles (leur nombre est
 // la taille de la chaîne).
 
-int cycles()
+char **cycles(const char *s)
 {
+    int n = strlen(s);
+    char **res = malloc(n * sizeof(char *));
+    if (res == NULL)
+    {
+        return NULL;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        res[i] = cycle(s, i);
+        if (res[i] == NULL)
+        {
+            // Libérer la mémoire allouée jusqu'à présent
+            for (int j = 0; j < i; j++)
+            {
+                free(res[j]);
+            }
+            free(res);
+            return NULL;
+        }
+    }
+    return res;
 }
 
 int main25(void)
 {
+    char *tests[] = {"abcdef", "x"};
+    for (int k = 0; k < 2; k++)
+    {
+        char **r = cycles(tests[k]);
+        int n = strlen(tests[k]);
+        printf("cycles(\"%s\") = [", tests[k]);
+        for (int i = 0; i < n; i++)
+        {
+            printf("\"%s\"", r[i]);
+            if (i < n - 1)
+            {
+                printf(", ");
+            }
+            free(r[i]);
+        }
+        free(r);
+        printf("]\n");
+    }
 
     return 0;
 }
@@ -249,17 +287,17 @@ int main29(void)
 
 // Fonction main
 
-// int main()
-// {
-//     int zero = main20();
-//     zero = main21();
-//     zero = main22();
-//     zero = main23();
-//     zero = main24();
-//     zero = main25();
-//     zero = main26();
-//     zero = main27();
-//     zero = main28();
-//     zero = main29();
-//     return zero;
-// }
+int main()
+{
+    int zero = main20();
+    zero = main21();
+    zero = main22();
+    zero = main23();
+    zero = main24();
+    zero = main25();
+    zero = main26();
+    zero = main27();
+    zero = main28();
+    zero = main29();
+    return zero;
+}
