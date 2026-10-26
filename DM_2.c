@@ -168,7 +168,7 @@ int cycle(int tableau[], int taille, int decalage)
     return 0;
 }
 
-int main(void)
+int main24(void)
 {
     int tableau[] = {0, 1, 2, 3, 4};
     int taille = sizeof(tableau) / sizeof(tableau[0]);
