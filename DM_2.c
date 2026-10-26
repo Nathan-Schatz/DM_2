@@ -148,17 +148,46 @@ int main23(void)
 
 // Exercice 24
 
-int cycle()
-{
-}
+// Écrire une fonction cycle prenant en argument une chaîne de caractères et un entier et
+// renvoyant la chaîne obtenue en décalant la chaîne d’un nombre d’indices égal à l’entier en deuxième argument.
+// Autrement dit, si l’entier vaut 3, les trois premiers caractères sont envoyés à la fin. On supposera (inutile de
+// le vérifier) que le décalage est un nombre entre zéro inclus et la taille de la chaîne exclue.
 
-int main24(void)
+int cycle(int tableau[], int taille, int decalage)
 {
+    for (int i = 0; i < decalage; i++)
+    {
+        int temp = tableau[0];
+        for (int j = 0; j < taille - 1; j++)
+        {
+            tableau[j] = tableau[j + 1];
+        }
+        tableau[taille - 1] = temp;
+    }
 
     return 0;
 }
 
+int main(void)
+{
+    int tableau[] = {0, 1, 2, 3, 4};
+    int taille = sizeof(tableau) / sizeof(tableau[0]);
+    int decalage = 2;
+    cycle(tableau, taille, decalage);
+    printf("Tableau après décalage de %d : ", decalage);
+    for (int i = 0; i < taille; i++)
+    {
+        printf("%d ", tableau[i]);
+    }
+    printf("\n");
+    return 0;
+}
+
 // Exercice 25
+
+// Écrire une fonction cycles prenant en argument une chaîne de caractères non vide (inutile
+// de le vérifier) et renvoyant le tableau des chaînes obtenues par tous les décalages possibles (leur nombre est
+// la taille de la chaîne).
 
 int cycles()
 {
