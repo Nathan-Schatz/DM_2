@@ -65,7 +65,7 @@ int nbnbnb(int tableau[], int taille)
     return count;
 }
 
-int main(void)
+int main21(void)
 {
     int tableau[] = {1, 2, 2, 3, 3, 3};
     int taille = sizeof(tableau) / sizeof(tableau[0]);
@@ -76,13 +76,36 @@ int main(void)
 
 // Exercice 22
 
-int nbsomindnb()
+// Écrire une fonction nbsomindnb prenant en argument un tableau d’entiers et sa taille et
+// renvoyant le nombre d’entiers naturels égaux à la somme des indices de leurs occurrences dans le tableau.
+
+int nbsomindnb(int tableau[], int taille)
 {
+    int count = 0;
+    for (int i = 0; i < taille; i++)
+    {
+        int somme_indices = 0;
+        for (int j = 0; j < taille; j++)
+        {
+            if (tableau[j] == tableau[i])
+            {
+                somme_indices += j;
+            }
+        }
+        if (tableau[i] >= 0 && tableau[i] == somme_indices)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 
 int main22(void)
 {
-
+    int tableau[] = {0, 1, 2, 3};
+    int taille = sizeof(tableau) / sizeof(tableau[0]);
+    int result = nbsomindnb(tableau, taille);
+    printf("Le nombre d'entiers naturels égaux à la somme des indices de leurs occurrences dans le tableau est : %d\n", result);
     return 0;
 }
 
