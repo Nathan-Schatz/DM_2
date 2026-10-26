@@ -111,12 +111,37 @@ int main22(void)
 
 // Exercice 23
 
-int prodind()
+// Écrire une fonction prodind prenant en argument un tableau d’entiers et sa taille ainsi qu’un
+// entier et renvoyant le produit des indices où cet entier figure (inutile de gérer les dépassements).
+
+int prodind(int tableau[], int taille, int entier)
 {
+    int produit = 1;
+    int first = 1;
+    for (int i = 0; i < taille; i++)
+    {
+        if (tableau[i] == entier)
+        {
+            if (first)
+            {
+                produit = i;
+                first = 0;
+            }
+            else
+            {
+                produit *= i;
+            }
+        }
+    }
+    return produit;
 }
 
 int main23(void)
 {
+    int tableau[] = {1, 2, 2, 3, 3, 3};
+    int taille = sizeof(tableau) / sizeof(tableau[0]);
+    int result = prodind(tableau, taille, 2);
+    printf("Le produit des indices où l'entier 2 figure dans le tableau est : %d\n", result);
 
     return 0;
 }
