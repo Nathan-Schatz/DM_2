@@ -302,7 +302,7 @@ int trichaine(char *s)
 
 int main27(void)
 {
-    char *tests[] = {"abcdef", "x", "cba", "bca"};
+    char tests[4][10] = {"abcdef", "x", "cba", "bca"};
     for (int k = 0; k < 4; k++)
     {
         trichaine(tests[k]);
@@ -316,6 +316,29 @@ int main27(void)
 // Écrire une fonction tibere prenant en argument une chaîne de caractères en chiffres romains
 // et renvoyant l’entier correspondant. On ne vérifiera pas que la chaîne correspond bien à un entier en chiffres
 // romains.
+
+int valeur_romaine(char c)
+{
+    switch (c)
+    {
+    case 'I':
+        return 1;
+    case 'V':
+        return 5;
+    case 'X':
+        return 10;
+    case 'L':
+        return 50;
+    case 'C':
+        return 100;
+    case 'D':
+        return 500;
+    case 'M':
+        return 1000;
+    default:
+        return 0;
+    }
+}
 
 int tibere(const char *s)
 {
@@ -351,7 +374,14 @@ int tibere(const char *s)
             value = 0;
             break;
         }
-        total += value;
+        if (i + 1 < n && valeur_romaine(s[i + 1]) > value)
+        {
+            total -= value;
+        }
+        else
+        {
+            total += value;
+        }
     }
     return total;
 }
@@ -377,10 +407,50 @@ int main28(void)
 // sont reportés tels quels. Pour simplifier, un caractère n’est interprété comme un chiffre romain que s’il est en
 // capitales. Attention, la chaîne "IVI" pourra être rencontrée et il faudra renvoyer "[4][1]".
 
-int compresseromain(const char *s)
+// Longueur du plus long préfixe de s qui est un chiffre romain valide
+// (M*, puis centaines, dizaines, unités en notation canonique)
+int longueur_romain(const char *s)
+{
+    int pos = 0;
+    while (s[pos] == 'M')
+        pos++;
+    // centaines : CM | CD | D?C{0,3}
+    if (s[pos] == 'C' && (s[pos + 1] == 'M' || s[pos + 1] == 'D'))
+        pos += 2;
+    else
+    {
+        if (s[pos] == 'D')
+            pos++;
+        for (int k = 0; k < 3 && s[pos] == 'C'; k++)
+            pos++;
+    }
+    // dizaines : XC | XL | L?X{0,3}
+    if (s[pos] == 'X' && (s[pos + 1] == 'C' || s[pos + 1] == 'L'))
+        pos += 2;
+    else
+    {
+        if (s[pos] == 'L')
+            pos++;
+        for (int k = 0; k < 3 && s[pos] == 'X'; k++)
+            pos++;
+    }
+    // unités : IX | IV | V?I{0,3}
+    if (s[pos] == 'I' && (s[pos + 1] == 'X' || s[pos + 1] == 'V'))
+        pos += 2;
+    else
+    {
+        if (s[pos] == 'V')
+            pos++;
+        for (int k = 0; k < 3 && s[pos] == 'I'; k++)
+            pos++;
+    }
+    return pos;
+}
+
+char *compresseromain(const char *s)
 {
     int n = strlen(s);
-    char *res = malloc((n * 5 + 1) * sizeof(char)); // Allocation maximale
+    char *res = malloc((n * 6 + 1) * sizeof(char));
     if (res == NULL)
     {
         return NULL;
@@ -389,14 +459,11 @@ int compresseromain(const char *s)
     int i = 0;
     while (i < n)
     {
-        if (s[i] >= 'A' && s[i] <= 'Z')
+        int len = longueur_romain(s + i);
+        if (len > 0)
         {
-            int j = i;
-            while (j < n && s[j] >= 'A' && s[j] <= 'Z')
-            {
-                j++;
-            }
-            char *roman = strndup(s + i, j - i);
+            int j = i + len;
+            char *roman = strndup(s + i, len);
             int value = tibere(roman);
             free(roman);
             char buffer[20];
@@ -415,8 +482,8 @@ int compresseromain(const char *s)
 
 int main29(void)
 {
-    char *tests[] = {"III", "IV", "IX", "LVIII", "MCMXCIV", "IVI"};
-    for (int k = 0; k < 6; k++)
+    char *tests[] = {"III", "IV", "IX", "LVIII", "MCMXCIV", "IVI", "M", "Salut XIV et HELLO", "XIX"};
+    for (int k = 0; k < 9; k++)
     {
         char *r = compresseromain(tests[k]);
         printf("compresseromain(\"%s\") = \"%s\"\n", tests[k], r);
