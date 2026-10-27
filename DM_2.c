@@ -370,12 +370,58 @@ int main28(void)
 
 // Ecercice 29
 
-int compresseromain()
+// Écrire une fonction compresseromain prenant en argument une chaîne de caractères et ren-
+// voyant la chaîne obtenue en convertissant toutes les suites de caractères correspondant à des chiffres romains
+// dans la chaîne en le chiffre correspondant entouré de crochets. Quand un chiffre romain est rencontré, on
+// capture le plus grand nombre de caractères consécutifs possible à partir de ce chiffre. Les autres caractères
+// sont reportés tels quels. Pour simplifier, un caractère n’est interprété comme un chiffre romain que s’il est en
+// capitales. Attention, la chaîne "IVI" pourra être rencontrée et il faudra renvoyer "[4][1]".
+
+int compresseromain(const char *s)
 {
+    int n = strlen(s);
+    char *res = malloc((n * 5 + 1) * sizeof(char)); // Allocation maximale
+    if (res == NULL)
+    {
+        return NULL;
+    }
+    res[0] = '\0';
+    int i = 0;
+    while (i < n)
+    {
+        if (s[i] >= 'A' && s[i] <= 'Z')
+        {
+            int j = i;
+            while (j < n && s[j] >= 'A' && s[j] <= 'Z')
+            {
+                j++;
+            }
+            char *roman = strndup(s + i, j - i);
+            int value = tibere(roman);
+            free(roman);
+            char buffer[20];
+            sprintf(buffer, "[%d]", value);
+            strcat(res, buffer);
+            i = j;
+        }
+        else
+        {
+            strncat(res, s + i, 1);
+            i++;
+        }
+    }
+    return res;
 }
 
 int main29(void)
 {
+    char *tests[] = {"III", "IV", "IX", "LVIII", "MCMXCIV", "IVI"};
+    for (int k = 0; k < 6; k++)
+    {
+        char *r = compresseromain(tests[k]);
+        printf("compresseromain(\"%s\") = \"%s\"\n", tests[k], r);
+        free(r);
+    }
 
     return 0;
 }
