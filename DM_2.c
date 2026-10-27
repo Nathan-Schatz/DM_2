@@ -278,13 +278,36 @@ int main26(void)
 
 // Exercice 27
 
-int trichaine()
+// Écrire une fonction trichaine prenant en argument une chaîne de caractères et la mutant
+// en permutant ses caractères afin qu’ils soient dans l’ordre croissant selon leur code ASCII (tous les caractères
+// sont supposés être dans la table ASCII-8 bits)
+
+int trichaine(char *s)
 {
+    int n = strlen(s);
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (s[i] > s[j])
+            {
+                char temp = s[i];
+                s[i] = s[j];
+                s[j] = temp;
+            }
+        }
+    }
+    return 0;
 }
 
 int main27(void)
 {
-
+    char *tests[] = {"abcdef", "x", "cba", "bca"};
+    for (int k = 0; k < 4; k++)
+    {
+        trichaine(tests[k]);
+        printf("trichaine(\"%s\") = \"%s\"\n", tests[k], tests[k]);
+    }
     return 0;
 }
 
