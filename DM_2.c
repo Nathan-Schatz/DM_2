@@ -313,12 +313,57 @@ int main27(void)
 
 // Exercice 28
 
-int tibere()
+// Écrire une fonction tibere prenant en argument une chaîne de caractères en chiffres romains
+// et renvoyant l’entier correspondant. On ne vérifiera pas que la chaîne correspond bien à un entier en chiffres
+// romains.
+
+int tibere(const char *s)
 {
+    int n = strlen(s);
+    int total = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int value = 0;
+        switch (s[i])
+        {
+        case 'I':
+            value = 1;
+            break;
+        case 'V':
+            value = 5;
+            break;
+        case 'X':
+            value = 10;
+            break;
+        case 'L':
+            value = 50;
+            break;
+        case 'C':
+            value = 100;
+            break;
+        case 'D':
+            value = 500;
+            break;
+        case 'M':
+            value = 1000;
+            break;
+        default:
+            value = 0;
+            break;
+        }
+        total += value;
+    }
+    return total;
 }
 
 int main28(void)
 {
+    char *tests[] = {"III", "IV", "IX", "LVIII", "MCMXCIV"};
+    for (int k = 0; k < 5; k++)
+    {
+        int r = tibere(tests[k]);
+        printf("tibere(\"%s\") = %d\n", tests[k], r);
+    }
 
     return 0;
 }
