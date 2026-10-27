@@ -239,12 +239,39 @@ int main25(void)
 
 // Exercice 26
 
-int cyclemin()
+// Écrire une fonction cyclemin prenant en argument une chaîne de caractères et renvoyant la
+// plus petite (dans l’ordre lexicographique) des chaînes obtenues par décalage de la chaîne en argument
+
+char *cyclemin(const char *s)
 {
+    int n = strlen(s);
+    char *min = malloc((n + 1) * sizeof(char));
+    if (min == NULL)
+    {
+        return NULL;
+    }
+    strcpy(min, s);
+    for (int i = 0; i < n; i++)
+    {
+        char *c = cycle(s, i);
+        if (strcmp(c, min) < 0)
+        {
+            strcpy(min, c);
+        }
+        free(c);
+    }
+    return min;
 }
 
 int main26(void)
 {
+    char *tests[] = {"abcdef", "x", "cba", "bca"};
+    for (int k = 0; k < 4; k++)
+    {
+        char *r = cyclemin(tests[k]);
+        printf("cyclemin(\"%s\") = \"%s\"\n", tests[k], r);
+        free(r);
+    }
 
     return 0;
 }
